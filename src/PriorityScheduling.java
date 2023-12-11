@@ -17,21 +17,30 @@ public class PriorityScheduling {
         if(isScheduled){
             return executionBursts;
         }
-        processes.sort(Comparator.comparingInt(process -> -process.priorityNumber));
-        for (Process value : processes) {
-            System.out.println(value.name);
-        }
+        processes.sort((p1, p2) -> {
+            if (p1.arrivalTime != p2.arrivalTime) {
+                return Integer.compare(p1.arrivalTime, p2.arrivalTime);
+            } else {
+                return Integer.compare(p1.burstTime, p2.burstTime);
+            }
+        });
         int completed = 0 ;
         int i = 0 ;
-        int totalTime = 0 ;
+        int currentTime = 0 ;
         while (completed < processes.size()){
             Process process = processes.get(i);
-            executionBursts.add(new ExecutionBurst(process,totalTime,totalTime + process.burstTime,totalTime));
-            totalTime += process.burstTime;
+            int start = Math.max(currentTime,process.arrivalTime);
+            int end = start + process.burstTime;
+            int waitTime = 0;
+            if(process.arrivalTime < currentTime){
+                waitTime = currentTime - process.arrivalTime;
+            }
+            executionBursts.add(new ExecutionBurst(process,start,end,waitTime));
+            currentTime = Math.max(currentTime,process.arrivalTime) + process.burstTime ;
             process.burstTime = 0 ;
             completed++;
             if(completed < processes.size()){
-                totalTime += contextSwitchTime;
+                currentTime += contextSwitchTime;
             }
             i++;
         }
