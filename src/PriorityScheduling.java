@@ -21,7 +21,7 @@ public class PriorityScheduling {
             if (p1.arrivalTime != p2.arrivalTime) {
                 return Integer.compare(p1.arrivalTime, p2.arrivalTime);
             } else {
-                return Integer.compare(p1.burstTime, p2.burstTime);
+                return Integer.compare(-p1.priorityNumber,-p2.priorityNumber);
             }
         });
         int completed = 0 ;
