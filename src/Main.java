@@ -25,8 +25,8 @@ public class Main {
             System.out.println("==============================");
         }*/
 
-        testPriorityScheduling();
-
+//        testPriorityScheduling();
+        testSRTF();
     }
     public static void testPriorityScheduling(){
         PriorityScheduling priorityScheduling = new PriorityScheduling(5);
@@ -73,6 +73,30 @@ public class Main {
         }
         System.out.println("---------------- TurnAround -----------------------");
         Map<String,Integer> turnAroundTList = sjf.getProcessTurnaroundTime();
+        for(var entry : turnAroundTList.entrySet()){
+            System.out.println(entry.getKey() + " => " +entry.getValue());
+        }
+    }
+
+    public static void testSRTF(){
+        SRTF srtf = new SRTF(5);
+        srtf.addProcess(new Process("p1","#FF0000",1,10,1));
+        srtf.addProcess(new Process("p2","#0000FF",3,20,2));
+        srtf.addProcess(new Process("p3","#00FF00",1,5,3));
+        srtf.addProcess(new Process("p4","#FFFF00",3,15,4));
+
+        List<ExecutionBurst> executionBursts = srtf.scheduleProcesses();
+
+        for (ExecutionBurst executionBurst : executionBursts) {
+            System.out.println(executionBurst.executedProcess.name + "=> " + executionBurst.start+ "=>"+ executionBurst.end + " ?? "+ executionBurst.waitTime);
+        }
+        System.out.println("--------------- WaitTime ------------------------");
+        Map<String,Integer> waitList = srtf.getProcessWaitTime();
+        for(var entry : waitList.entrySet()){
+            System.out.println(entry.getKey() + " => " +entry.getValue());
+        }
+        System.out.println("---------------- TurnAround -----------------------");
+        Map<String,Integer> turnAroundTList = srtf.getProcessTurnaroundTime();
         for(var entry : turnAroundTList.entrySet()){
             System.out.println(entry.getKey() + " => " +entry.getValue());
         }
