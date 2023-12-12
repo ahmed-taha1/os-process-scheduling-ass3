@@ -1,3 +1,5 @@
+package Process;
+
 public class Process {
     public final String name;
     public final String color;

@@ -1,11 +1,14 @@
-import java.util.*;
+package Scheduling.SchedulingAlgorithms;
 
-public class SJF {
+import Scheduling.ExecutionBurst;
+import Process.Process;
+import java.util.*;
+public class PriorityScheduling {
     private final List<Process> processes ;
     private final int contextSwitchTime ;
     private boolean isScheduled ;
     private final List<ExecutionBurst> executionBursts;
-    public SJF(int contextSwitchTime){
+    public PriorityScheduling(int contextSwitchTime){
         this.processes = new ArrayList<>();
         this.contextSwitchTime = contextSwitchTime;
         this.executionBursts = new ArrayList<>();
@@ -22,7 +25,7 @@ public class SJF {
             if (p1.arrivalTime != p2.arrivalTime) {
                 return Integer.compare(p1.arrivalTime, p2.arrivalTime);
             } else {
-                return Integer.compare(p1.burstTime, p2.burstTime);
+                return Integer.compare(-p1.priorityNumber,-p2.priorityNumber);
             }
         });
         int completed = 0 ;
@@ -63,6 +66,7 @@ public class SJF {
         }
         return waitList;
     }
+
     public Map<String, Integer> getProcessTurnaroundTime(){
         List<ExecutionBurst> executionBursts = scheduleProcesses();
         Map<String,Integer>turnAroundList = new HashMap<>();

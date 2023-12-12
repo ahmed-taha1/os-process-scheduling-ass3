@@ -1,10 +1,15 @@
+package Scheduling.SchedulingAlgorithms;
+
+import Scheduling.ExecutionBurst;
+import Process.Process;
 import java.util.*;
-public class PriorityScheduling {
+
+public class SJF {
     private final List<Process> processes ;
     private final int contextSwitchTime ;
     private boolean isScheduled ;
     private final List<ExecutionBurst> executionBursts;
-    public PriorityScheduling(int contextSwitchTime){
+    public SJF(int contextSwitchTime){
         this.processes = new ArrayList<>();
         this.contextSwitchTime = contextSwitchTime;
         this.executionBursts = new ArrayList<>();
@@ -21,7 +26,7 @@ public class PriorityScheduling {
             if (p1.arrivalTime != p2.arrivalTime) {
                 return Integer.compare(p1.arrivalTime, p2.arrivalTime);
             } else {
-                return Integer.compare(-p1.priorityNumber,-p2.priorityNumber);
+                return Integer.compare(p1.burstTime, p2.burstTime);
             }
         });
         int completed = 0 ;
@@ -36,8 +41,8 @@ public class PriorityScheduling {
                 waitTime = currentTime - process.arrivalTime;
             }
             executionBursts.add(new ExecutionBurst(process,start,end,waitTime));
-            currentTime = Math.max(currentTime,process.arrivalTime) + process.burstTime ;
-            process.burstTime = 0 ;
+            currentTime = Math.max(currentTime,process.arrivalTime) + process.burstTime;
+            process.burstTime = 0;
             completed++;
             if(completed < processes.size()){
                 currentTime += contextSwitchTime;
@@ -62,6 +67,7 @@ public class PriorityScheduling {
         }
         return waitList;
     }
+
     public Map<String, Integer> getProcessTurnaroundTime(){
         List<ExecutionBurst> executionBursts = scheduleProcesses();
         Map<String,Integer>turnAroundList = new HashMap<>();

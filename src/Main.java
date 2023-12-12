@@ -1,6 +1,12 @@
+import Scheduling.ExecutionBurst;
+import Scheduling.SchedulingAlgorithms.PriorityScheduling;
+import Scheduling.SchedulingAlgorithms.SJF;
+import Scheduling.SchedulingAlgorithms.SRTF;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import Process.Process;
 
 public class Main {
     public static void main(String[] args) {
@@ -19,8 +25,8 @@ public class Main {
 //        int processesCount = getNumberOfProcesses();
 //        int contextSwitchTime = getContextSwitchTime();
     /* for (int i = 0 ; i<processesCount;i++){
-            System.out.println(">>>>>> Process ("+(i+1)+") Data");
-            Process process = getProcessData();
+            System.out.println(">>>>>> Process.Process ("+(i+1)+") Data");
+            Process.Process process = getProcessData();
             sjfNonPreemptive.addProcess(process);
             System.out.println("==============================");
         }*/
@@ -79,11 +85,11 @@ public class Main {
     }
 
     public static void testSRTF(){
-        SRTF srtf = new SRTF(5);
+        SRTF srtf = new SRTF(1);
         srtf.addProcess(new Process("p1","#FF0000",1,10,1));
         srtf.addProcess(new Process("p2","#0000FF",3,20,2));
         srtf.addProcess(new Process("p3","#00FF00",1,5,3));
-        srtf.addProcess(new Process("p4","#FFFF00",3,15,4));
+        srtf.addProcess(new Process("p4","#FFFF00",3,1,4));
 
         List<ExecutionBurst> executionBursts = srtf.scheduleProcesses();
 
@@ -114,7 +120,7 @@ public class Main {
         System.out.print("Enter ProcessName:");
         String name = new Scanner(System.in).nextLine();
 
-        System.out.print("Enter Process Color:");
+        System.out.print("Enter Process.Process Color:");
         String color = new Scanner(System.in).nextLine();
 
         System.out.print("Enter ProcessArrivalTime:");

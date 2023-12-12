@@ -1,3 +1,6 @@
+package Scheduling;
+
+import Process.Process;
 
 public class ExecutionBurst {
     public Process executedProcess;
