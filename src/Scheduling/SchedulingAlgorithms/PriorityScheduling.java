@@ -3,20 +3,13 @@ package Scheduling.SchedulingAlgorithms;
 import Scheduling.ExecutionBurst;
 import Process.Process;
 import java.util.*;
-public class PriorityScheduling {
-    private final List<Process> processes ;
-    private final int contextSwitchTime ;
-    private boolean isScheduled ;
-    private final List<ExecutionBurst> executionBursts;
+public class PriorityScheduling extends SchedulingAlgorithm{
     public PriorityScheduling(int contextSwitchTime){
-        this.processes = new ArrayList<>();
-        this.contextSwitchTime = contextSwitchTime;
-        this.executionBursts = new ArrayList<>();
-        this.isScheduled = false;
+        super();
+        super.contextSwitchTime = contextSwitchTime;
     }
-    public void addProcess(Process process){
-        this.processes.add(process);
-    }
+
+    @Override
     public List<ExecutionBurst>scheduleProcesses(){
         if(isScheduled){
             return executionBursts;
@@ -50,37 +43,5 @@ public class PriorityScheduling {
         }
         isScheduled = true;
         return  executionBursts;
-    }
-    public Map<String,Integer> getProcessWaitTime(){
-        List<ExecutionBurst> executionBursts = scheduleProcesses();
-        Map<String,Integer>waitList = new HashMap<>();
-        for (ExecutionBurst executionBurst : executionBursts) {
-            Process process = executionBurst.executedProcess;
-            int time = executionBurst.waitTime;
-            if (waitList.get(process.name) == null) {
-                waitList.put(process.name, time);
-            } else {
-                int newTime = waitList.get(process.name) + time;
-                waitList.put(process.name, newTime);
-            }
-        }
-        return waitList;
-    }
-
-    public Map<String, Integer> getProcessTurnaroundTime(){
-        List<ExecutionBurst> executionBursts = scheduleProcesses();
-        Map<String,Integer>turnAroundList = new HashMap<>();
-        for (ExecutionBurst executionBurst : executionBursts) {
-            Process process = executionBurst.executedProcess;
-            int time = executionBurst.waitTime;
-            int executionTime = executionBurst.end - executionBurst.start;
-            if (turnAroundList.get(process.name) == null) {
-                turnAroundList.put(process.name, time + executionTime);
-            } else {
-                int newTime = turnAroundList.get(process.name) + time + executionTime;
-                turnAroundList.put(process.name, newTime);
-            }
-        }
-        return turnAroundList;
     }
 }
