@@ -1,13 +1,10 @@
 import Scheduling.ExecutionBurst;
-import Scheduling.SchedulingAlgorithms.PriorityScheduling;
-import Scheduling.SchedulingAlgorithms.SJF;
-import Scheduling.SchedulingAlgorithms.SRTF;
+import Scheduling.SchedulingAlgorithms.*;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import Process.Process;
-import Scheduling.SchedulingAlgorithms.SchedulingAlgorithm;
 
 public class Main {
     public static void main(String[] args) {
@@ -33,7 +30,7 @@ public class Main {
         }*/
 
 //        testPriorityScheduling();
-        testSRTF();
+        testAGScheduling();
     }
     public static void testPriorityScheduling(){
         PriorityScheduling priorityScheduling = new PriorityScheduling(5);
@@ -48,7 +45,7 @@ public class Main {
             System.out.println(executionBurst.executedProcess.name + "=> " + executionBurst.start+ "=>"+ executionBurst.end + " ?? "+ executionBurst.waitTime);
         }
         System.out.println("--------------- WaitTime ------------------------");
-        Map<String,Integer> waitList = priorityScheduling.getProcessWaitTime();
+        Map<String,Integer> waitList = priorityScheduling.getProcessesWaitTime();
         for(var entry : waitList.entrySet()){
             System.out.println(entry.getKey() + " => " +entry.getValue());
         }
@@ -71,7 +68,7 @@ public class Main {
             System.out.println(executionBurst.executedProcess.name + "=> " + executionBurst.start+ "=>"+ executionBurst.end + " ?? "+ executionBurst.waitTime);
         }
         System.out.println("--------------- WaitTime ------------------------");
-        Map<String,Integer> waitList = sjf.getProcessWaitTime();
+        Map<String,Integer> waitList = sjf.getProcessesWaitTime();
         for(var entry : waitList.entrySet()){
             System.out.println(entry.getKey() + " => " +entry.getValue());
         }
@@ -82,25 +79,25 @@ public class Main {
         }
     }
 
-    public static void testSRTF(){
-        SchedulingAlgorithm srtf = new SRTF(2);
-        srtf.addProcess(new Process("p1","#FF0000",1,10,1));
-        srtf.addProcess(new Process("p2","#0000FF",3,20,2));
-        srtf.addProcess(new Process("p3","#00FF00",1,5,3));
-        srtf.addProcess(new Process("p4","#FFFF00",3,1,4));
+    public static void testAGScheduling(){
+        AGScheduling test = new AGScheduling(4, 2);
+        test.addProcess(new Process("p1","#FF0000",0,17,4));
+        test.addProcess(new Process("p2","#0000FF",3,6,9));
+        test.addProcess(new Process("p3","#00FF00",4,10,2));
+        test.addProcess(new Process("p4","#FFFF00",29,4,8));
 
-        List<ExecutionBurst> executionBursts = srtf.scheduleProcesses();
+        List<ExecutionBurst> executionBursts = test.scheduleProcesses();
 
         for (ExecutionBurst executionBurst : executionBursts) {
             System.out.println(executionBurst.executedProcess.name + "=> " + executionBurst.start+ "=>"+ executionBurst.end + " ?? "+ executionBurst.waitTime);
         }
         System.out.println("--------------- WaitTime ------------------------");
-        Map<String,Integer> waitList = srtf.getProcessWaitTime();
+        Map<String,Integer> waitList = test.getProcessesWaitTime();
         for(var entry : waitList.entrySet()){
             System.out.println(entry.getKey() + " => " +entry.getValue());
         }
         System.out.println("---------------- TurnAround -----------------------");
-        Map<String,Integer> turnAroundTList = srtf.getProcessTurnaroundTime();
+        Map<String,Integer> turnAroundTList = test.getProcessTurnaroundTime();
         for(var entry : turnAroundTList.entrySet()){
             System.out.println(entry.getKey() + " => " +entry.getValue());
         }

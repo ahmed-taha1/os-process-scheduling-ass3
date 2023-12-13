@@ -26,7 +26,7 @@ public abstract class SchedulingAlgorithm {
         this.processes.add(process);
     }
 
-    public Map<String,Integer> getProcessWaitTime(){
+    public Map<String,Integer> getProcessesWaitTime(){
         List<ExecutionBurst> executionBursts = scheduleProcesses();
         Map<String,Integer>waitList = new HashMap<>();
         for (ExecutionBurst executionBurst : executionBursts) {
