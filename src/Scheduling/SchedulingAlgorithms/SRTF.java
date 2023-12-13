@@ -49,10 +49,10 @@ public class SRTF extends SchedulingAlgorithm{
                 if(currentWorkingProcessIndex != -1){
                     calcAndStoreExecutionBurst(currentWorkingProcessIndex, currentTime, processesStartTime, processesWaitTime);
                     processesWaitTime[currentWorkingProcessIndex] = 0;
+                    waitAllArrivedProcesses(processesWaitTime, currentWorkingProcessIndex, contextSwitchTime, currentTime);
+                    currentTime += contextSwitchTime;
                 }
-                waitAllArrivedProcesses(processesWaitTime, currentWorkingProcessIndex, contextSwitchTime, currentTime);
                 currentWorkingProcessIndex = minArrivedBurstTimeProcessIndex;
-                currentTime += contextSwitchTime;
                 processesStartTime[currentWorkingProcessIndex] = currentTime;
             }
 
@@ -69,7 +69,6 @@ public class SRTF extends SchedulingAlgorithm{
                 completed++;
             }
         }
-
         isScheduled = true;
         return  executionBursts;
     }

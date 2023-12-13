@@ -58,10 +58,7 @@ public class Main {
             System.out.println(entry.getKey() + " => " +entry.getValue());
         }
     }
-    public static void testSRJF(){
-
-    }
-    public static void testSJFNonPreemptive(){
+    public static void testSJF(){
         SJF sjf = new SJF(5);
         sjf.addProcess(new Process("p1","#FF0000",0,10,1));
         sjf.addProcess(new Process("p2","#0000FF",0,20,2));
