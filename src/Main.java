@@ -85,7 +85,7 @@ public class Main {
     }
 
     public static void testSRTF(){
-        SRTF srtf = new SRTF(1);
+        SRTF srtf = new SRTF(2);
         srtf.addProcess(new Process("p1","#FF0000",1,10,1));
         srtf.addProcess(new Process("p2","#0000FF",3,20,2));
         srtf.addProcess(new Process("p3","#00FF00",1,5,3));
