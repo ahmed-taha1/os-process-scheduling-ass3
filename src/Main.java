@@ -30,7 +30,7 @@ public class Main {
         }*/
 
 //        testPriorityScheduling();
-        testAGScheduling();
+        testSRTF();
     }
     public static void testPriorityScheduling(){
         PriorityScheduling priorityScheduling = new PriorityScheduling(5);
@@ -60,6 +60,30 @@ public class Main {
         sjf.addProcess(new Process("p1","#FF0000",0,10,1));
         sjf.addProcess(new Process("p2","#0000FF",0,20,2));
         sjf.addProcess(new Process("p3","#00FF00",0,5,3));
+        sjf.addProcess(new Process("p4","#FFFF00",0,15,4));
+
+        List<ExecutionBurst> executionBursts = sjf.scheduleProcesses();
+
+        for (ExecutionBurst executionBurst : executionBursts) {
+            System.out.println(executionBurst.executedProcess.name + "=> " + executionBurst.start+ "=>"+ executionBurst.end + " ?? "+ executionBurst.waitTime);
+        }
+        System.out.println("--------------- WaitTime ------------------------");
+        Map<String,Integer> waitList = sjf.getProcessesWaitTime();
+        for(var entry : waitList.entrySet()){
+            System.out.println(entry.getKey() + " => " +entry.getValue());
+        }
+        System.out.println("---------------- TurnAround -----------------------");
+        Map<String,Integer> turnAroundTList = sjf.getProcessTurnaroundTime();
+        for(var entry : turnAroundTList.entrySet()){
+            System.out.println(entry.getKey() + " => " +entry.getValue());
+        }
+    }
+
+    public static void testSRTF(){
+        SchedulingAlgorithm sjf = new SRTF(5);
+        sjf.addProcess(new Process("p1","#FF0000",4,10,1));
+        sjf.addProcess(new Process("p2","#0000FF",2,20,2));
+        sjf.addProcess(new Process("p3","#00FF00",1,5,3));
         sjf.addProcess(new Process("p4","#FFFF00",0,15,4));
 
         List<ExecutionBurst> executionBursts = sjf.scheduleProcesses();

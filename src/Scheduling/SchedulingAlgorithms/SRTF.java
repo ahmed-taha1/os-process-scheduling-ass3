@@ -20,44 +20,46 @@ public class SRTF extends SchedulingAlgorithm{
         int currentWorkingProcessIndex = -1;
         int[] processesStartTime = new int[processes.size()];
         int[] processesWaitTime = new int[processes.size()];
+        int[] quantum = new int[processes.size()];  // for solving starvation problem
         for (int i = 0; i < processes.size(); i++) {
             processesStartTime[i] = -1;
             processesWaitTime[i] = 0;
+            quantum[i] = processes.get(i).burstTime;
         }
 
         while (completed < processes.size()){
             // get the minimum arrived burst time process
-            int minArrivedBurstTimeProcessIndex = -1;
-            int minArrivedProcessBurstTime = Integer.MAX_VALUE;
+            int minArrivedQuantumProcessIndex = -1;
+            int minArrivedProcessQuantum = Integer.MAX_VALUE;
             for(int i = 0; i < processes.size(); i++){
                 if(processes.get(i).arrivalTime <= currentTime){
-                    if(processes.get(i).burstTime < minArrivedProcessBurstTime && processes.get(i).burstTime > 0){
-                        minArrivedProcessBurstTime = processes.get(i).burstTime;
-                        minArrivedBurstTimeProcessIndex = i;
+                    if(quantum[i] < minArrivedProcessQuantum && processes.get(i).burstTime > 0){    // compare with the minimum quantum
+                        minArrivedProcessQuantum = quantum[i];
+                        minArrivedQuantumProcessIndex = i;
                     }
                 }
             }
             // if no found at current time and no working process
-            if(currentWorkingProcessIndex == -1 && minArrivedBurstTimeProcessIndex == -1){
+            if(currentWorkingProcessIndex == -1 && minArrivedQuantumProcessIndex == -1){
                 currentTime++;
                 continue;
             }
 
             // if there is no process working or the found process burst time is less than the current process remaining time
-            if(currentWorkingProcessIndex == -1 || processes.get(currentWorkingProcessIndex).burstTime > minArrivedProcessBurstTime){
+            if(currentWorkingProcessIndex == -1 || processes.get(currentWorkingProcessIndex).burstTime > processes.get(minArrivedQuantumProcessIndex).burstTime){
                 // add the last working process to the execution burst
                 if(currentWorkingProcessIndex != -1){
                     calcAndStoreExecutionBurst(currentWorkingProcessIndex, currentTime, processesStartTime, processesWaitTime);
                     processesWaitTime[currentWorkingProcessIndex] = 0;
-                    waitAllArrivedProcesses(processesWaitTime, currentWorkingProcessIndex, contextSwitchTime, currentTime);
+                    waitAllArrivedProcesses(processesWaitTime, currentWorkingProcessIndex, contextSwitchTime, currentTime, quantum);
                     currentTime += contextSwitchTime;
                 }
-                currentWorkingProcessIndex = minArrivedBurstTimeProcessIndex;
+                currentWorkingProcessIndex = minArrivedQuantumProcessIndex;
                 processesStartTime[currentWorkingProcessIndex] = currentTime;
             }
 
             processes.get(currentWorkingProcessIndex).burstTime--;
-            waitAllArrivedProcesses(processesWaitTime, currentWorkingProcessIndex, 1, currentTime);
+            waitAllArrivedProcesses(processesWaitTime, currentWorkingProcessIndex, 1, currentTime, quantum);
             currentTime++;
 
 
@@ -73,12 +75,17 @@ public class SRTF extends SchedulingAlgorithm{
         return  executionBursts;
     }
 
-    private void waitAllArrivedProcesses(int[] processesWaitTime, int currentWorkingProcessIndex, int time, int currentTime) {
-        for(int i = 0; i < processesWaitTime.length; i++){
-            // check if it arrived and not working now
-            if(processes.get(i).arrivalTime <= currentTime && currentWorkingProcessIndex != i) {
-                processesWaitTime[i] += time;
+    private void waitAllArrivedProcesses(int[] processesWaitTime, int currentWorkingProcessIndex, int time, int currentTime, int[] quantum) {
+        int simTime = currentTime;
+        for(int t = 0; t < time; t++) {
+            for (int i = 0; i < processesWaitTime.length; i++) {
+                // check if it arrived and not working now
+                if (processes.get(i).arrivalTime <= simTime && currentWorkingProcessIndex != i) {
+                    processesWaitTime[i] += 1;
+                }
+                quantum[i]--;
             }
+            simTime++;
         }
     }
 
