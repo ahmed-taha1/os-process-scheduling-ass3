@@ -1,36 +1,22 @@
 import Scheduling.ExecutionBurst;
 import Scheduling.SchedulingAlgorithms.*;
 
+import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import Process.Process;
 
+import javax.swing.*;
+
 public class Main {
     public static void main(String[] args) {
-        //// GUI
 
-//        SwingUtilities.invokeLater(() -> {
-//            JFrame frame = new JFrame("Gantt Chart Example");
-//            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//            frame.getContentPane().add(new Chart(list), BorderLayout.CENTER);
-//            frame.pack();
-//            frame.setVisible(true);
-//        });
 
-        /// CONSOLE
-
-//        int processesCount = getNumberOfProcesses();
-//        int contextSwitchTime = getContextSwitchTime();
-    /* for (int i = 0 ; i<processesCount;i++){
-            System.out.println(">>>>>> Process.Process ("+(i+1)+") Data");
-            Process.Process process = getProcessData();
-            sjfNonPreemptive.addProcess(process);
-            System.out.println("==============================");
-        }*/
 
 //        testPriorityScheduling();
-        testSRTF();
+//        testSRTF();
+        testAGScheduling();;
     }
     public static void testPriorityScheduling(){
         PriorityScheduling priorityScheduling = new PriorityScheduling(5);
@@ -40,7 +26,13 @@ public class Main {
         priorityScheduling.addProcess(new Process("p4","#FFFF00",0,15,4));
 
         List<ExecutionBurst> executionBursts = priorityScheduling.scheduleProcesses();
-
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("Gantt Chart Example");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.getContentPane().add(new GanttChartPanelSJF(executionBursts, priorityScheduling), BorderLayout.CENTER);
+            frame.pack();
+            frame.setVisible(true);
+        });
         for (ExecutionBurst executionBurst : executionBursts) {
             System.out.println(executionBurst.executedProcess.name + "=> " + executionBurst.start+ "=>"+ executionBurst.end + " ?? "+ executionBurst.waitTime);
         }
@@ -63,7 +55,13 @@ public class Main {
         sjf.addProcess(new Process("p4","#FFFF00",0,15,4));
 
         List<ExecutionBurst> executionBursts = sjf.scheduleProcesses();
-
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("Gantt Chart Example");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.getContentPane().add(new GanttChartPanelSJF(executionBursts, sjf), BorderLayout.CENTER);
+            frame.pack();
+            frame.setVisible(true);
+        });
         for (ExecutionBurst executionBurst : executionBursts) {
             System.out.println(executionBurst.executedProcess.name + "=> " + executionBurst.start+ "=>"+ executionBurst.end + " ?? "+ executionBurst.waitTime);
         }
@@ -87,7 +85,13 @@ public class Main {
         sjf.addProcess(new Process("p4","#FFFF00",0,15,4));
 
         List<ExecutionBurst> executionBursts = sjf.scheduleProcesses();
-
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("Gantt Chart Example");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.getContentPane().add(new GanttChartPanelSJF(executionBursts, sjf), BorderLayout.CENTER);
+            frame.pack();
+            frame.setVisible(true);
+        });
         for (ExecutionBurst executionBurst : executionBursts) {
             System.out.println(executionBurst.executedProcess.name + "=> " + executionBurst.start+ "=>"+ executionBurst.end + " ?? "+ executionBurst.waitTime);
         }
@@ -111,7 +115,13 @@ public class Main {
         test.addProcess(new Process("p4","#FFFF00",29,4,8));
 
         List<ExecutionBurst> executionBursts = test.scheduleProcesses();
-
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("Gantt Chart Example");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.getContentPane().add(new GanttChartPanelSJF(executionBursts, test), BorderLayout.CENTER);
+            frame.pack();
+            frame.setVisible(true);
+        });
         for (ExecutionBurst executionBurst : executionBursts) {
             System.out.println(executionBurst.executedProcess.name + "=> " + executionBurst.start+ "=>"+ executionBurst.end + " ?? "+ executionBurst.waitTime);
         }

@@ -30,7 +30,7 @@ public class AGScheduling extends SchedulingAlgorithm{
         waitTime = new int[processes.size()];
         AGProcess activeAGProcess = getLowestArrivedAGProcess(currentTime);
         while (completed < processes.size()){
-            if(activeAGProcess == null){
+            if(activeAGProcess == null){ // CPU IDLE
                 currentTime++;
                 activeAGProcess = getLowestArrivedAGProcess(currentTime);
                 continue;
@@ -47,27 +47,38 @@ public class AGScheduling extends SchedulingAlgorithm{
                 activeAGProcess.quantum = 0 ;
             }
             if(activeAGProcess.quantum == 0 ){
-                int waitTime = getProcessWaitTime(activeAGProcess.process.name);
+                int waitTime = getProcessBurstWaitTime(activeAGProcess.process.name);
                 executionBursts.add(new ExecutionBurst(activeAGProcess.process,start,currentTime,waitTime));
                 if(activeAGProcess.process.burstTime != 0 ){
                     activeAGProcess.quantum = oldQuantum + calculateMeanQuantum();
                 }
                 if(!queue.isEmpty()){
+                    currentTime = applyContextSwitchTime(currentTime);
                     activeAGProcess = queue.peek();
                     queue.poll();
                 }else{
+                    currentTime = applyContextSwitchTime(currentTime);
                     activeAGProcess = getLowestArrivedAGProcess(currentTime);
                 }
             }else{
-                int waitTime = getProcessWaitTime(activeAGProcess.process.name);
+                int waitTime = getProcessBurstWaitTime(activeAGProcess.process.name);
                 executionBursts.add(new ExecutionBurst(activeAGProcess.process,start,currentTime,waitTime));
                 activeAGProcess.quantum += oldQuantum;
                 queue.add(activeAGProcess);
+
+                currentTime = applyContextSwitchTime(currentTime);
                 activeAGProcess = getLowestArrivedAGProcess(currentTime);
             }
         }
         isScheduled = true;
         return executionBursts;
+    }
+    private int applyContextSwitchTime(int currentTime){
+        for(int t = 0; t < contextSwitchTime; t++){
+            increaseProcessesWaitTime(currentTime, null);
+            currentTime++;
+        }
+        return currentTime;
     }
     private void sortProcesses(){
         processes.sort((p1, p2) -> {
@@ -82,7 +93,7 @@ public class AGScheduling extends SchedulingAlgorithm{
         for(int i = 0 ;i<quantum;i++){
             agProcess.quantum--;
             agProcess.process.burstTime--;
-            waitAllProcesses(currentTime,agProcess);
+            increaseProcessesWaitTime(currentTime,agProcess);
             currentTime++;
         }
         return currentTime;
@@ -107,14 +118,17 @@ public class AGScheduling extends SchedulingAlgorithm{
         AGProcess highestPriorityProcess = getLowestArrivedAGProcess(currentTime);
         return Objects.equals(highestPriorityProcess.process.name, agProcess.process.name);
     }
-    private void waitAllProcesses(int currentTime, AGProcess activeAGProcess){
+    private void increaseProcessesWaitTime(int currentTime, AGProcess activeAGProcess){
         for(int i = 0; i < processes.size(); i++){
-            if(processes.get(i).process.arrivalTime <= currentTime && !Objects.equals(processes.get(i).process.name, activeAGProcess.process.name)){
+            if(processes.get(i).process.arrivalTime <= currentTime && activeAGProcess == null){
+                waitTime[i]++;
+            }
+            else if(processes.get(i).process.arrivalTime <= currentTime && !Objects.equals(processes.get(i).process.name, activeAGProcess.process.name)){
                 waitTime[i]++;
             }
         }
     }
-    private int getProcessWaitTime(String processName){
+    private int getProcessBurstWaitTime(String processName){
         for(int i= 0  ;i<processes.size();i++){
             if(Objects.equals(processes.get(i).process.name, processName)){
                 int timeWaited = waitTime[i];
