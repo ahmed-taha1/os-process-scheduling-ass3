@@ -1,6 +1,6 @@
 import Scheduling.ExecutionBurst;
 import Scheduling.SchedulingAlgorithms.*;
-import View.GanttChartPanelSJF;
+import View.GanttChartPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +18,7 @@ public class Testing {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Gantt Chart Example");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.getContentPane().add(new GanttChartPanelSJF(executionBursts, schedulingAlgorithm.getProcessesWaitTime(), schedulingAlgorithm.getProcessTurnaroundTime()), BorderLayout.CENTER);
+            frame.getContentPane().add(new GanttChartPanel(executionBursts, schedulingAlgorithm.getProcessesWaitTime(), schedulingAlgorithm.getProcessTurnaroundTime()), BorderLayout.CENTER);
             frame.pack();
             frame.setVisible(true);
         });
@@ -49,7 +49,7 @@ public class Testing {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Gantt Chart Example");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.getContentPane().add(new GanttChartPanelSJF(executionBursts, priorityScheduling.getProcessesWaitTime(), priorityScheduling.getProcessTurnaroundTime()), BorderLayout.CENTER);
+            frame.getContentPane().add(new GanttChartPanel(executionBursts, priorityScheduling.getProcessesWaitTime(), priorityScheduling.getProcessTurnaroundTime()), BorderLayout.CENTER);
             frame.pack();
             frame.setVisible(true);
         });
@@ -78,7 +78,7 @@ public class Testing {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Gantt Chart Example");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.getContentPane().add(new GanttChartPanelSJF(executionBursts, sjf.getProcessesWaitTime(), sjf.getProcessTurnaroundTime()), BorderLayout.CENTER);
+            frame.getContentPane().add(new GanttChartPanel(executionBursts, sjf.getProcessesWaitTime(), sjf.getProcessTurnaroundTime()), BorderLayout.CENTER);
             frame.pack();
             frame.setVisible(true);
         });
@@ -108,7 +108,7 @@ public class Testing {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Gantt Chart Example");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.getContentPane().add(new GanttChartPanelSJF(executionBursts, sjf.getProcessesWaitTime(), sjf.getProcessTurnaroundTime()), BorderLayout.CENTER);
+            frame.getContentPane().add(new GanttChartPanel(executionBursts, sjf.getProcessesWaitTime(), sjf.getProcessTurnaroundTime()), BorderLayout.CENTER);
             frame.pack();
             frame.setVisible(true);
         });
@@ -138,7 +138,7 @@ public class Testing {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Gantt Chart Example");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.getContentPane().add(new GanttChartPanelSJF(executionBursts, test.getProcessesWaitTime(), test.getProcessTurnaroundTime()), BorderLayout.CENTER);
+            frame.getContentPane().add(new GanttChartPanel(executionBursts, test.getProcessesWaitTime(), test.getProcessTurnaroundTime()), BorderLayout.CENTER);
             frame.pack();
             frame.setVisible(true);
         });

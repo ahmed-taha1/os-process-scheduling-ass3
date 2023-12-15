@@ -24,7 +24,7 @@ public class App {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("OS assignment 3");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.getContentPane().add(new GanttChartPanelSJF(schedulingAlgorithm.scheduleProcesses(), schedulingAlgorithm.getProcessesWaitTime(), schedulingAlgorithm.getProcessTurnaroundTime()), BorderLayout.CENTER);
+            frame.getContentPane().add(new GanttChartPanel(schedulingAlgorithm.scheduleProcesses(), schedulingAlgorithm.getProcessesWaitTime(), schedulingAlgorithm.getProcessTurnaroundTime()), BorderLayout.CENTER);
             frame.pack();
             frame.setVisible(true);
         });

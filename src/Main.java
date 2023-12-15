@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Scanner;
 import Process.Process;
 import View.App;
-import View.GanttChartPanelSJF;
 
 import javax.swing.*;
 
