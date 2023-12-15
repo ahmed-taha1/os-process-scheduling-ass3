@@ -10,12 +10,12 @@ import java.util.Map;
 import Process.Process;
 import Scheduling.SchedulingAlgorithms.SchedulingAlgorithm;
 
-public class GanttChartPanelSJF extends JPanel {
+public class GanttChartPanel extends JPanel {
     private List<ExecutionBurst> executedProcesses;
     private Map<String, Integer> processesWaitTime;
     private Map<String, Integer> processesTurnAroundTime;
 
-    public GanttChartPanelSJF(List<ExecutionBurst> executedProcesses, Map<String, Integer> processesWaitTime, Map<String, Integer> processesTurnAroundTime) {
+    public GanttChartPanel(List<ExecutionBurst> executedProcesses, Map<String, Integer> processesWaitTime, Map<String, Integer> processesTurnAroundTime) {
         this.executedProcesses = executedProcesses;
         this.processesWaitTime = processesWaitTime;
         this.processesTurnAroundTime = processesTurnAroundTime;
