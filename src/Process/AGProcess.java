@@ -1,4 +1,4 @@
-package Scheduling.SchedulingAlgorithms;
+package Process;
 import Process.Process;
 
 public class AGProcess {

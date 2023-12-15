@@ -22,9 +22,7 @@ public abstract class SchedulingAlgorithm {
 
     public abstract List<ExecutionBurst>scheduleProcesses();
 
-    public void addProcess(Process process){
-        this.processes.add(process);
-    }
+    public abstract void addProcess(Process process);
 
     public Map<String,Integer> getProcessesWaitTime(){
         List<ExecutionBurst> executionBursts = scheduleProcesses();

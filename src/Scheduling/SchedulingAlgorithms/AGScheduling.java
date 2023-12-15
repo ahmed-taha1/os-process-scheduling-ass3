@@ -2,6 +2,7 @@ package Scheduling.SchedulingAlgorithms;
 import Scheduling.ExecutionBurst;
 import java.util.*;
 import Process.Process;
+import Process.AGProcess;
 
 public class AGScheduling extends SchedulingAlgorithm{
     List<AGProcess> processes;
@@ -16,6 +17,8 @@ public class AGScheduling extends SchedulingAlgorithm{
         this.quantum = quantum;
         this.queue = new ArrayDeque<>();
     }
+
+    @Override
     public void addProcess(Process process){
         int agFactor = calculateAGFactor(process);
         processes.add(new AGProcess(process,quantum,agFactor));
@@ -89,7 +92,7 @@ public class AGScheduling extends SchedulingAlgorithm{
             }
         });
     }
-    private int executeQuantum(int quantum,int currentTime,AGProcess agProcess){
+    private int executeQuantum(int quantum, int currentTime, AGProcess agProcess){
         for(int i = 0 ;i<quantum;i++){
             agProcess.quantum--;
             agProcess.process.burstTime--;
@@ -114,7 +117,7 @@ public class AGScheduling extends SchedulingAlgorithm{
         }
         return process;
     }
-    private boolean isHighestPriorityProcess(int currentTime,AGProcess agProcess){
+    private boolean isHighestPriorityProcess(int currentTime, AGProcess agProcess){
         AGProcess highestPriorityProcess = getLowestArrivedAGProcess(currentTime);
         return Objects.equals(highestPriorityProcess.process.name, agProcess.process.name);
     }

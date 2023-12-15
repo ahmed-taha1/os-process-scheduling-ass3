@@ -10,6 +10,11 @@ public class PriorityScheduling extends SchedulingAlgorithm{
     }
 
     @Override
+    public void addProcess(Process process) {
+        this.processes.add(process);
+    }
+
+    @Override
     public List<ExecutionBurst>scheduleProcesses(){
         if(isScheduled){
             return executionBursts;
@@ -44,4 +49,6 @@ public class PriorityScheduling extends SchedulingAlgorithm{
         isScheduled = true;
         return  executionBursts;
     }
+
+
 }

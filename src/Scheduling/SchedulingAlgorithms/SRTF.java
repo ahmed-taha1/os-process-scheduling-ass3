@@ -11,6 +11,11 @@ public class SRTF extends SchedulingAlgorithm{
     }
 
     @Override
+    public void addProcess(Process process) {
+        this.processes.add(process);
+    }
+
+    @Override
     public List<ExecutionBurst>scheduleProcesses(){
         if(isScheduled){
             return executionBursts;
@@ -29,16 +34,8 @@ public class SRTF extends SchedulingAlgorithm{
 
         while (completed < processes.size()){
             // get the minimum arrived burst time process
-            int minArrivedQuantumProcessIndex = -1;
-            int minArrivedProcessQuantum = Integer.MAX_VALUE;
-            for(int i = 0; i < processes.size(); i++){
-                if(processes.get(i).arrivalTime <= currentTime){
-                    if(quantum[i] < minArrivedProcessQuantum && processes.get(i).burstTime > 0){    // compare with the minimum quantum
-                        minArrivedProcessQuantum = quantum[i];
-                        minArrivedQuantumProcessIndex = i;
-                    }
-                }
-            }
+            int minArrivedQuantumProcessIndex = getMinArrivedIndex(quantum, currentTime);
+
             // if no found at current time and no working process
             if(currentWorkingProcessIndex == -1 && minArrivedQuantumProcessIndex == -1){
                 currentTime++;
@@ -51,7 +48,7 @@ public class SRTF extends SchedulingAlgorithm{
                 if(currentWorkingProcessIndex != -1){
                     calcAndStoreExecutionBurst(currentWorkingProcessIndex, currentTime, processesStartTime, processesWaitTime);
                     processesWaitTime[currentWorkingProcessIndex] = 0;
-                    waitAllArrivedProcesses(processesWaitTime, currentWorkingProcessIndex, contextSwitchTime, currentTime, quantum);
+                    waitAllArrivedProcesses(processesWaitTime, -1, contextSwitchTime, currentTime, quantum);
                     currentTime += contextSwitchTime;
                 }
                 currentWorkingProcessIndex = minArrivedQuantumProcessIndex;
@@ -69,6 +66,11 @@ public class SRTF extends SchedulingAlgorithm{
                 processesWaitTime[currentWorkingProcessIndex] = 0;
                 currentWorkingProcessIndex = -1;
                 completed++;
+                // if there is process ready to switch after the finished process
+                if(getMinArrivedIndex(quantum, currentTime) != -1) {
+                    waitAllArrivedProcesses(processesWaitTime, -1, contextSwitchTime, currentTime, quantum);
+                    currentTime += contextSwitchTime;
+                }
             }
         }
         isScheduled = true;
@@ -80,10 +82,12 @@ public class SRTF extends SchedulingAlgorithm{
         for(int t = 0; t < time; t++) {
             for (int i = 0; i < processesWaitTime.length; i++) {
                 // check if it arrived and not working now
-                if (processes.get(i).arrivalTime <= simTime && currentWorkingProcessIndex != i) {
-                    processesWaitTime[i] += 1;
+                if (processes.get(i).arrivalTime <= simTime){
+                    quantum[i]--;
+                    if (currentWorkingProcessIndex != i && processes.get(i).burstTime != 0) {
+                        processesWaitTime[i] += 1;
+                    }
                 }
-                quantum[i]--;
             }
             simTime++;
         }
@@ -95,5 +99,19 @@ public class SRTF extends SchedulingAlgorithm{
         int end = currentTime;
         Process process = processes.get(processIndex);
         executionBursts.add(new ExecutionBurst(process, start, end, waitTime));
+    }
+
+    private int getMinArrivedIndex(int quantum[], int currentTime){
+        int minArrivedQuantumProcessIndex = -1;
+        int minArrivedProcessQuantum = Integer.MAX_VALUE;
+        for(int i = 0; i < processes.size(); i++){
+            if(processes.get(i).arrivalTime <= currentTime){
+                if(quantum[i] < minArrivedProcessQuantum && processes.get(i).burstTime > 0){    // compare with the minimum quantum
+                    minArrivedProcessQuantum = quantum[i];
+                    minArrivedQuantumProcessIndex = i;
+                }
+            }
+        }
+        return minArrivedQuantumProcessIndex;
     }
 }
