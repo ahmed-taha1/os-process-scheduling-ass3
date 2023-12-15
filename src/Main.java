@@ -19,6 +19,6 @@ public class Main {
 //        Testing.testPriorityScheduling();
 //        Testing.testSRTF();
 //        Testing.testAGScheduling();
-//        Testing.generalTest(new AGScheduling(4, 2));
+//        Testing.generalTest(new PriorityScheduling(4));
     }
 }

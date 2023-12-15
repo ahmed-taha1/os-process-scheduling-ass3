@@ -56,12 +56,14 @@ public class AGScheduling extends SchedulingAlgorithm{
                     activeAGProcess.quantum = oldQuantum + calculateMeanQuantum();
                 }
                 if(!queue.isEmpty()){
-                    currentTime = applyContextSwitchTime(currentTime);
+                    AGProcess oldProcess = activeAGProcess;
                     activeAGProcess = queue.peek();
+                    currentTime = applyContextSwitchTime(currentTime,oldProcess,activeAGProcess);
                     queue.poll();
                 }else{
-                    currentTime = applyContextSwitchTime(currentTime);
+                    AGProcess oldProcess = activeAGProcess;
                     activeAGProcess = getLowestArrivedAGProcess(currentTime);
+                    currentTime = applyContextSwitchTime(currentTime,oldProcess,activeAGProcess);
                 }
             }else{
                 int waitTime = getProcessBurstWaitTime(activeAGProcess.process.name);
@@ -69,14 +71,21 @@ public class AGScheduling extends SchedulingAlgorithm{
                 activeAGProcess.quantum += oldQuantum;
                 queue.add(activeAGProcess);
 
-                currentTime = applyContextSwitchTime(currentTime);
+                AGProcess oldProcess = activeAGProcess;
                 activeAGProcess = getLowestArrivedAGProcess(currentTime);
+                currentTime = applyContextSwitchTime(currentTime,oldProcess,activeAGProcess);
             }
         }
         isScheduled = true;
         return executionBursts;
     }
-    private int applyContextSwitchTime(int currentTime){
+    private int applyContextSwitchTime(int currentTime,AGProcess currentRunningProcess,AGProcess nextProcess){
+        if(nextProcess == null){
+            return currentTime;
+        }
+        if(Objects.equals(currentRunningProcess.process.name, nextProcess.process.name)){
+            return currentTime;
+        }
         for(int t = 0; t < contextSwitchTime; t++){
             increaseProcessesWaitTime(currentTime, null);
             currentTime++;
@@ -160,18 +169,18 @@ public class AGScheduling extends SchedulingAlgorithm{
         }else{
             agFactor += process.priorityNumber;
         }
-        if(process.name == "p1"){
-            agFactor = 20;
-        }
-        else if(process.name == "p2"){
-            agFactor = 17;
-        }
-        else if(process.name == "p3"){
-            agFactor = 16;
-        }
-        else{
-            agFactor = 43;
-        }
+//        if(Objects.equals(process.name, "p1")){
+//            agFactor = 20;
+//        }
+//        else if(Objects.equals(process.name, "p2")){
+//            agFactor = 17;
+//        }
+//        else if(Objects.equals(process.name, "p3")){
+//            agFactor = 16;
+//        }
+//        else{
+//            agFactor = 43;
+//        }
         return agFactor;
     }
 }

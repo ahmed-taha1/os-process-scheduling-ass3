@@ -7,9 +7,6 @@ import java.awt.*;
 import java.util.List;
 import java.util.Map;
 
-import Process.Process;
-import Scheduling.SchedulingAlgorithms.SchedulingAlgorithm;
-
 public class GanttChartPanel extends JPanel {
     private List<ExecutionBurst> executedProcesses;
     private Map<String, Integer> processesWaitTime;

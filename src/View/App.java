@@ -18,9 +18,9 @@ public class App {
         schedulingAlgorithm = schedulingFactory.getSchedulingAlgorithm(schedulingAlgorithmName);
 
         for (int i = 0; i < numOfProcesses; i++){
-            schedulingAlgorithm.addProcess(getProcessData());
+            Process process = getProcessData();
+            schedulingAlgorithm.addProcess(process);
         }
-
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("OS assignment 3");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

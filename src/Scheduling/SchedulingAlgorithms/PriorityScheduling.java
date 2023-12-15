@@ -30,16 +30,17 @@ public class PriorityScheduling extends SchedulingAlgorithm{
         int i = 0 ;
         int currentTime = 0 ;
         while (completed < processes.size()){
-            Process process = processes.get(i);
-            int start = Math.max(currentTime,process.arrivalTime);
-            int end = start + process.burstTime;
+            Process activeProcess = processes.get(i);
+            int start = Math.max(currentTime,activeProcess.arrivalTime);
+            int end = start + activeProcess.burstTime;
             int waitTime = 0;
-            if(process.arrivalTime < currentTime){
-                waitTime = currentTime - process.arrivalTime;
+            if(activeProcess.arrivalTime < currentTime){
+                waitTime = currentTime - activeProcess.arrivalTime;
             }
-            executionBursts.add(new ExecutionBurst(process,start,end,waitTime));
-            currentTime = Math.max(currentTime,process.arrivalTime) + process.burstTime ;
-            process.burstTime = 0 ;
+            starvationHandler(currentTime,activeProcess.burstTime + contextSwitchTime);
+            executionBursts.add(new ExecutionBurst(activeProcess,start,end,waitTime));
+            currentTime = Math.max(currentTime,activeProcess.arrivalTime) + activeProcess.burstTime ;
+            activeProcess.burstTime = 0 ;
             completed++;
             if(completed < processes.size()){
                 currentTime += contextSwitchTime;
@@ -50,5 +51,15 @@ public class PriorityScheduling extends SchedulingAlgorithm{
         return  executionBursts;
     }
 
-
+    // APPLY AGING FOR SOLVING STARVATION PROBLEM
+    private void starvationHandler(int currentTime,int burstTime){
+        for(int j = 0 ;j < burstTime ;j++){
+            for (Process process : processes) {
+                if (process.arrivalTime <= currentTime) {
+                    process.priorityNumber++;
+                }
+            }
+            currentTime++;
+        }
+    }
 }

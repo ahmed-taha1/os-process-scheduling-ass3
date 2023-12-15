@@ -7,7 +7,7 @@ public class Process {
     public final Color color;
     public final int arrivalTime;
     public int burstTime;
-    public final int priorityNumber;
+    public int priorityNumber;
     public Process(String name,Color color,int arrivalTime,int burstTime,int priorityNumber){
         this.name = name;
         this.color = color;
